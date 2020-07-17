@@ -1,21 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import React from "react";
 
+import NavigationScreen from "./src/Navigation/index";
+import { LoadAssets } from "./src/components";
+import { ThemeProvider } from "@shopify/restyle";
+import { Theme as theme } from "./src/components/index";
+
+const fonts = {
+  "SFProText-Bold": require("./assets/fonts/SF-Pro-Text-Bold.otf"),
+  "SFProText-Semibold": require("./assets/fonts/SF-Pro-Text-Semibold.otf"),
+  "SFProText-Regular": require("./assets/fonts/SF-Pro-Text-Regular.otf"),
+};
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ThemeProvider theme={theme}>
+      <LoadAssets {...{ fonts }}>
+        <NavigationScreen />
+      </LoadAssets>
+    </ThemeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
