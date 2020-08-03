@@ -1,9 +1,7 @@
 import React from "react";
-import { View, Dimensions, StyleSheet, Image } from "react-native";
-import { BORDER_RADIUS } from "../Screen/OnBound";
+import { View, Dimensions, StyleSheet } from "react-native";
 const { width, height } = Dimensions.get("window");
-const SLIDE_HEIGHT = 0.61 * height;
-import { Text } from "./index";
+import { theme, Text } from "./index";
 const styles = StyleSheet.create({
   container: {
     width,
@@ -14,38 +12,27 @@ const styles = StyleSheet.create({
     height: 100,
     justifyContent: "center",
   },
-  iconContainer: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "flex-end",
-  },
-
-  icon: {
-    ...StyleSheet.absoluteFillObject,
-    width: undefined,
-    height: undefined,
-    borderBottomEndRadius: BORDER_RADIUS,
-  },
 });
+
 interface SliderProps {
   label: string;
-  right?: boolean;
-  icon: number;
+  right: string;
 }
 
-const Slider = ({ label, right, icon }: SliderProps) => {
+const SliderComponent = (props: SliderProps) => {
   const transform = [
     {
-      translateY: (SLIDE_HEIGHT - 100) / 2,
+      translateY: (theme.borderRadii.xl - 100) / 2,
     },
-    { translateX: ((right ? width / 2 - 50 : -width / 2 + 50) * width) / 2 },
-    { rotate: right ? "-90deg" : "90deg" },
+    {
+      translateX:
+        ((props.right ? width / 2 - 50 : -width / 2 + 50) * width) / 2,
+    },
+    { rotate: props.right ? "-90deg" : "90deg" },
   ];
 
   return (
     <View style={styles.container}>
-      <View style={styles.iconContainer}>
-        <Image source={icon} style={styles.icon} />
-      </View>
       <View
         style={[
           styles.textContainer,
@@ -54,10 +41,10 @@ const Slider = ({ label, right, icon }: SliderProps) => {
           },
         ]}
       >
-        <Text variant="hero">{label}</Text>
+        <Text variant="hero" >{props.label}</Text>
       </View>
     </View>
   );
 };
 
-export { Slider, SLIDE_HEIGHT };
+export default SliderComponent;

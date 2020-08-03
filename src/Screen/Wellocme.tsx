@@ -1,91 +1,93 @@
-import React from 'react'
+import React from "react";
+import { Image, Dimensions } from "react-native";
+import { Box, Text, Button, useTheme } from "../components";
+const { width } = Dimensions.get("window");
+interface Props {}
 
-interface Props {
-
-}
-
-function findmissining() {
-     var arr=[...Array(100).keys()].slice(1)
-
-  let sum=0;
-  for(let x in arr){
-       sum+=arr[x]
-  }
-  let len=arr.length+1;
-  return Math.floor((len*(len+1))/2)-sum
-}
-findmissining(array1)
-
-
-function find10(){
-     const arr=["Islamabad", "Gilgit", "Nawabshah", "Karachi",
-"Abbotabad", "Gilgit", "Hyderabad", "Islamabad", "Lahore",
-"Hyderabad", "Sukkur", "Faisalabad", "Kohat",
-"Faisalabad", "Faisalabad", "Faisalabad", "Faisalabad",
-"Lahore", "Abbotabad", "Attock", "Karachi", "Rawalpindi",
-"Nawab Shah", "Abbotabad", "Sukkur", "Attock", "Multan",
-"Faisalabad"];
-
-const obj={
-     "Faisalabad": 0,
-     "Islamabad": 0,
-     "Karachi": 0,
-     "Gilgit": 0,
-     "Lahore": 0,
-     "Hyderabad": 0,
-     "Nawab_Shah": 0,
-     "Abbotabad": 0,
-     "Sukkur": 0,
-     "Attock": 0,
-
-
-
-
+interface firsProps={
+          src: string
+          width: number,
+          height: number,
 
 }
-arr.map(item=>{
-     if(item==="Faisalabad"){
-          obj.Faisalabad+1
-     }
-     if(item==="Islamabad"){
-          obj.Islamabad+1
-     }
-     if(item==="Karachi"){
-          obj.Karachi+1
-     }
-     if(item==="Abbotabad"){
-          obj.Abbotabad+1
-     }
-     if(item==="Gilgit"){
-          obj.Gilgit+1
-     }
-     if(item==="Lahore"){
-          obj.Lahore+1
-     }
-     if(item==="Hyderabad"){
-          obj.Hyderabad+1
-     }
-     if(item==="Nawab Shah"){
-          obj.Nawab_Shah+1
-     }
-     if(item==="Sukkur"){
-          obj.Sukkur+1
-     }
-     if(item==="Attock"){
-          obj.Attock+1
-     }
-return obj
 
-})
+const picater = {
+     src: require("../../assets//images/bg-pattern.png"),
+     width: 3383,
+     height: 5074,
+};
+const Welcome  = (props: Props) => {
+
+  const theme = useTheme();
 
 
-}
-const Wellocme = (props: Props) => {
-     return (
-          <View>
+  const first= ({src,width,height}:firsProps)=>{
 
-          </div>
-     )
-}
 
-export default Wellocme
+    <Box flex={1} backgroundColor="white">
+      <Box
+        flex={1}
+        justifyContent="flex-end"
+        alignItems="center"
+        borderBottomRightRadius={theme.borderRadii.xl}
+        backgroundColor={theme.colors.slide.grey}
+      >
+        <Image
+          source={src}
+          style={{
+            width: width - theme.borderRadii.xl,
+            height:
+              ((width - theme.borderRadii.xl) * height) / width,
+          }}
+        />
+      </Box>
+      <Box flex={1} borderBottomRightRadius="xl">
+        <Box
+          backgroundColor="grey"
+          position="absolute"
+          top={0}
+          bottom={0}
+          right={0}
+          left={0}
+        >
+          <Box
+            backgroundColor="white"
+            justifyContent="space-evenly"
+            borderTopLeftRadius={theme.borderRadii.xl}
+            alignItems="center"
+            flex={1}
+            padding="xl"
+          >
+            <Text variant="title2" >
+              Let’s get started
+            </Text>
+            <Text variant="body">
+              Login to your account below or signup for an amazing experience
+            </Text>
+
+            {/* //bootn  */}
+
+            <Button
+              label="Have an account? Login"
+              variant="primary"
+              onPress={}
+            />
+            <Button label="Join us, it’s Free" onPress={} />
+            <Button variant="transparent" label="Forgot password?" onPress={} />
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+     }
+  return (
+    <View>
+      <Text>
+                 <first {...picater} />
+
+      </Text>
+    </View>
+  )
+
+
+export default Wellocme;

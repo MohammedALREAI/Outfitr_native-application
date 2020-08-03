@@ -1,27 +1,28 @@
 import React from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
-import { Slider, SLIDE_HEIGHT, SubSlider, Dote } from "../components";
+import { View, StyleSheet, Dimensions, Image,  } from "react-native";
+import { SubSlider, Dote, useTheme, Box, Theme, makeStyle} from "../components";
+import {  StackNavigationProp } from "@react-navigation/stack";
+import { sliders } from "../utils/const"
 
 import {
   onScrollEvent,
   interpolateColor,
   useScrollHandler,
 } from "react-native-redash";
-import { sliders } from "../utils/constant";
-
-import Animated, { multiply, divide } from "react-native-reanimated";
+import Animated, { multiply, divide, interpolate, Extrapolate} from "react-native-reanimated"
+import { Route } from "../components/Routes";
 const { width } = Dimensions.get("window");
-  export const BORDER_RADIUS = 75;
 
-interface OnBoundProps {}
-const styles = StyleSheet.create({
+
+
+const useStyles = makeStyle((theme:Theme)=>({
   container: {
     flex: 1,
   },
   slider: {
-    height: SLIDE_HEIGHT,
+       height: theme.borderRadii.xl,
     backgroundColor: "cyan",
-    borderBottomEndRadius: BORDER_RADIUS,
+       borderBottomEndRadius: theme.borderRadii.xl,
   },
   footer: {
     flex: 1,
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   footerContext: {
     flex: 1,
     backgroundColor: "white",
-    borderTopLeftRadius: BORDER_RADIUS,
+       borderBottomEndRadius: theme.borderRadii.xl,
   },
   pagination: {
     height: 45,
@@ -40,9 +41,21 @@ const styles = StyleSheet.create({
     width,
     justifyContent: "center",
   },
-});
+     underlay: {
+          ...StyleSheet.absoluteFillObject,
+          justifyContent: "flex-end",
+          alignItems: "center",
+          borderBottomEndRadius: theme.borderRadii.xl,
+          overflow:"hidden"
 
- export const OnBound = (props: OnBoundProps) => {
+     },
+}));
+
+
+export const OnBound = ({ navigation }: StackNavigationProp<Route,"OnBound">) => {
+
+     const styles=useStyles();
+
   const { scrollHandler, x } = useScrollHandler();
   const onScroll = onScrollEvent({ x });
   const scroll = React.useRef<Animated.ScrollView>(null);
@@ -52,8 +65,86 @@ const styles = StyleSheet.create({
     outputRange: sliders.map((item) => item.color),
   });
 
-  const pagination = () => (
-    <View style={styles.pagination}>
+      const SubSliderContainer = (
+           {
+                sliders.map(({ title description }, index) => {
+                     const last = index === sliders.length - 1
+                     return (
+                          <SubSlider
+                               onPress={() => {
+                                    if (last) {
+                                         navigation.navigate("welcome")
+                                    }
+                                    if (scroll.current) {
+                                         scroll.current.getNode.scrollTo({
+                                              x: width * (index + 1),
+                                              animated: true,
+                                         });
+                                    }
+                               }}
+                               key={`index_${index}`}
+                               {...{ title, description, last }}
+                          />
+                     )
+                }
+                )
+           }
+      )
+
+//  sepilit element to four subsite
+ const renderSidlerBackground=()=>
+ {
+      sliders.map(({ picture},index)=>{
+           const opacity = interpolate(x,{
+                inputRange:[(index-1)*width,index*width,(index+1)*width],
+                outputRange:[0,1,0],
+                extrapolate: Extrapolate.CLAMP,
+           })
+           return(
+                <Animated.View style={[styles.underlay, { opacity}]} key={`index${index}`}>
+          <Image source={picture?.url}
+                         style={{
+                                    ...StyleSheet.absoluteFillObject,
+                                    width: width - theme.borderRadii.xl,
+                    height: ((width - BORDER_RADIUS) * picture?.height)/ picture?.width }}/>
+                     </Animated.View>)})}
+
+
+
+
+
+
+  const render_Siders=()=>(
+sliders.map(({ label, picture}, index) => (
+                    <Slider
+                      key={`index_${index}`}
+                      label={label}
+                      right={index % 2 == 0 ? false : true}
+                 />
+            )));
+  return (
+    <Box style={styles.container}>
+
+      <Box style={[styles.slider,{backgroundColor} ]}>
+                 {renderSidlerBackground}
+
+          <Animated.ScrollView
+            horizontal
+            ref={scroll}
+            snapToInterval={width}
+            decelerationRate="fast"
+            showsHorizontalScrollIndicator={false}
+            bounces={false}
+            {...{ scrollHandler }}>
+
+
+       </Animated.ScrollView>
+
+        <Box style={styles.footer}>
+
+                      <Box style={styles.footerContext}>
+
+ <View style={styles.pagination}>
       {sliders.map((_, index) => (
         <Dote
           key={`index${index}`}
@@ -62,56 +153,7 @@ const styles = StyleSheet.create({
         />
       ))}
     </View>
-  );
-     const ScrollViewElement=()=>(
-       <Animated.ScrollView
-            horizontal
-            ref={scroll}
-            snapToInterval={width}
-            decelerationRate="fast"
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-            {...{ scrollHandler }}
-       >
-            {sliders.map((item, index) => (
-                 <Slider
-                      key={`index_${index}`}
-                      label={item.label}
-                      right={index % 2 == 0 ? false : true}
-                 />
-            ))}
-       </Animated.ScrollView>
-  )
-  const SubSlidersItems = () => {
-    return sliders.map(({ title, description }, index) => (
-      <SubSlider
-        onPress={() => {
-          if (scroll.current) {
-            scroll.current.getNode.scrollTo({
-              x: width * (index + 1),
-              animated: true,
-            });
-          }
-        }}
-        key={`index_${index}`}
-        {...{ title, description }}
-        last={index === sliders.length - 1}
-      />
-    ));
-  };
-
-  return (
-    <View style={styles.container}>
-
-      <View style={[styles.slider, {backgroundColor }]}>
-                 {ScrollViewElement}
-
-        <View style={styles.footer}>
-
-             <View style={styles.footerContext}>
-
-                           {pagination}
-            <Animated.View  style={{
+     <Animated.View  style={{
                      width:width*sliders.length,
                      flexDirection:'row',
                   transform: [
@@ -121,11 +163,12 @@ const styles = StyleSheet.create({
                   ]
                 }}
               >
-                                {SubSlidersItems}
-                           </Animated.View>
-        </View>
-      </View>
-    </View>
+
+                      </Animated.View>
+                      </Box>
+                 </Box>
+            </Box>
   );
 };
+
 
