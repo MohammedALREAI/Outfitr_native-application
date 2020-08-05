@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, Dimensions } from "react-native";
 import { Box, Text, Button, useTheme } from "../components";
+import { StackNavigationProp, Route } from "../components/Routes";
 const { width } = Dimensions.get("window");
 interface Props {}
 
@@ -16,7 +17,7 @@ const picater = {
      width: 3383,
      height: 5074,
 };
-const Welcome  = (props: Props) => {
+const Welcome  = ({navigation}:StackNavigationProp<Route,"Wellcome">) => {
 
   const theme = useTheme();
 

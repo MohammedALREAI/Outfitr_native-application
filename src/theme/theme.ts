@@ -16,6 +16,7 @@ const Theme = {
     grey: "#f4f0ef",
     darkGrey: "#8A8D90",
     danger: "#FF0058",
+    primaryLight: "#2CB9B0",
   },
   spacing: {
     s: 8,

@@ -1,4 +1,3 @@
-
 import { StackNavigationProp } from "@react-navigation/stack";
 import type { ParamListBase, RouteProp } from "@react-navigation/native";
 
@@ -13,4 +12,7 @@ export type Route = {
   OnBound: undefined;
   welcome: undefined;
   login: undefined;
+  SingUp: undefined;
+  ForgetPassword: undefined;
+  changedPassword: undefined;
 };

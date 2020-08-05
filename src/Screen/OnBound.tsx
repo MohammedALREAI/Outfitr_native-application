@@ -1,14 +1,15 @@
 import React from "react";
-import { View, StyleSheet, Dimensions, Image,  } from "react-native";
-import { SubSlider, Dote, useTheme, Box, Theme, makeStyle} from "../components";
-import {  StackNavigationProp } from "@react-navigation/stack";
-import { sliders } from "../utils/const"
+import { View, StyleSheet, Dimensions, Image, Slider,  } from "react-native";
+import { SubSlider, Dote, Box, makeStyle} from "../components";
+import { StackNavigationProp } from '@react-navigation/stack';
+
+import { sliders } from "../utils/constant"
 
 import {
   onScrollEvent,
   interpolateColor,
   useScrollHandler,
-} from "react-native-redash";
+} from "react-native-redash"
 import Animated, { multiply, divide, interpolate, Extrapolate} from "react-native-reanimated"
 import { Route } from "../components/Routes";
 const { width } = Dimensions.get("window");
@@ -52,7 +53,7 @@ const useStyles = makeStyle((theme:Theme)=>({
 }));
 
 
-export const OnBound = ({ navigation }: StackNavigationProp<Route,"OnBound">) => {
+ const OnBound = ({ navigation }: StackNavigationProp<Route,"OnBound">) => {
 
      const styles=useStyles();
 
@@ -65,6 +66,14 @@ export const OnBound = ({ navigation }: StackNavigationProp<Route,"OnBound">) =>
     outputRange: sliders.map((item) => item.color),
   });
 
+  const render_Siders=()=>(
+sliders.map(({ label, picture}, index) => (
+                    <Slider
+                      key={`index_${index}`}
+                      label={label}
+                      right={index % 2 == 0 ? false : true}
+                 />
+            )));
       const SubSliderContainer = (
            {
                 sliders.map(({ title description }, index) => {
@@ -113,15 +122,6 @@ export const OnBound = ({ navigation }: StackNavigationProp<Route,"OnBound">) =>
 
 
 
-
-  const render_Siders=()=>(
-sliders.map(({ label, picture}, index) => (
-                    <Slider
-                      key={`index_${index}`}
-                      label={label}
-                      right={index % 2 == 0 ? false : true}
-                 />
-            )));
   return (
     <Box style={styles.container}>
 
@@ -169,6 +169,8 @@ sliders.map(({ label, picture}, index) => (
                  </Box>
             </Box>
   );
-};
 
 
+
+
+export default OnBound
